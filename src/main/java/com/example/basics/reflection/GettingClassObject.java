@@ -1,4 +1,4 @@
-package com.example.basics.annotations;
+package com.example.basics.reflection;
 
 import java.io.Serializable;
 
