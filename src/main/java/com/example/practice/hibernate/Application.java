@@ -25,6 +25,13 @@ public class Application {
     }
 
     private static void saveHistories(List<TransactionHistory> histories) {
-
+        for(TransactionHistory history: histories) {
+            try {
+                hibernate.write(history);
+            } catch (SQLException | NoSuchMethodException | IllegalAccessException e) {
+                System.err.println(e.getMessage());
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
