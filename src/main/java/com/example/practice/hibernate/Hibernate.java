@@ -72,7 +72,7 @@ public class Hibernate<T> {
             }
         }
 
-        if(statement.execute()) {
+        if(statement.executeUpdate() > 0) {
             System.out.printf("Entity saved successfully: %s\n", t);
         } else {
             System.out.printf("unable to save entity: %s\n", t);
