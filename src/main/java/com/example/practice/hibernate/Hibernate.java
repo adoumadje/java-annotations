@@ -1,13 +1,9 @@
 package com.example.practice.hibernate;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
-import java.util.Arrays;
 import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicLong;
 
