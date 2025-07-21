@@ -1,5 +1,9 @@
 package com.example.practice.hibernate;
 
+import com.example.practice.hibernate.annotations.Column;
+import com.example.practice.hibernate.annotations.PrimaryKey;
+import com.example.practice.hibernate.annotations.Table;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

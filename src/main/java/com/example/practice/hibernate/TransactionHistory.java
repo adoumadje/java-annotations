@@ -1,6 +1,10 @@
 package com.example.practice.hibernate;
 
 
+import com.example.practice.hibernate.annotations.Column;
+import com.example.practice.hibernate.annotations.PrimaryKey;
+import com.example.practice.hibernate.annotations.Table;
+
 @Table(name = "transaction_history")
 public class TransactionHistory {
     @PrimaryKey(name = "id")
