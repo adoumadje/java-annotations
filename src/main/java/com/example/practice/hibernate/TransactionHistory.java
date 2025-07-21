@@ -12,6 +12,10 @@ public class TransactionHistory {
     @Column(name = "amount")
     private Double amount;
 
+    public TransactionHistory() {
+
+    }
+
     public TransactionHistory(String name, String cardType, Double amount) {
         this.name = name;
         this.cardType = cardType;

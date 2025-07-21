@@ -3,11 +3,11 @@ package com.example.practice.hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.*;
+import java.util.Arrays;
 import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -77,5 +77,46 @@ public class Hibernate<T> {
         } else {
             System.out.printf("unable to save entity: %s\n", t);
         }
+    }
+
+    public T read(Class<T> clazz, Long pk) throws SQLException, NoSuchMethodException, InvocationTargetException,
+            InstantiationException, IllegalAccessException {
+        Table table = clazz.getAnnotation(Table.class);
+        PrimaryKey primaryKey = null;
+
+        Field[] fields = clazz.getDeclaredFields();
+        for(Field field: fields) {
+            if(field.getAnnotation(PrimaryKey.class) != null) {
+                primaryKey = field.getAnnotation(PrimaryKey.class);
+                break;
+            }
+        }
+
+        String sql = """
+                SELECT * FROM %s
+                WHERE %s = %d
+                """.formatted(table.name(), primaryKey.name(), pk);
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        ResultSet resultSet = statement.executeQuery();
+        if(!resultSet.next()) {
+            System.out.println("Not found");
+            return null;
+        }
+        Constructor<T> constructor = clazz.getConstructor();
+        T dbObject = constructor.newInstance();
+
+        for(Field field: fields) {
+            field.setAccessible(true);
+            if(field.getAnnotation(PrimaryKey.class) != null) {
+                field.set(dbObject, pk);
+            } else if(field.getAnnotation(Column.class) != null) {
+                Column column = field.getAnnotation(Column.class);
+                field.set(dbObject, resultSet.getObject(column.name()));
+            }
+        }
+
+        resultSet.next();
+        return dbObject;
     }
 }

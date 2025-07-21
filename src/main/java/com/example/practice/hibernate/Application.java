@@ -1,5 +1,6 @@
 package com.example.practice.hibernate;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -20,8 +21,23 @@ public class Application {
 
         List<TransactionHistory> histories = List.of(history, history1, history2, history3);
 
-        saveHistories(histories);
+//        saveHistories(histories);
 
+        readHistory(1L);
+
+    }
+
+    private static void readHistory(Long id) {
+        try {
+            TransactionHistory fromDb = hibernate.read(TransactionHistory.class, id);
+            System.out.println(fromDb);
+        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException
+                 | IllegalAccessException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static void saveHistories(List<TransactionHistory> histories) {
