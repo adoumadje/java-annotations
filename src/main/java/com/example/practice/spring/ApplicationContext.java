@@ -1,11 +1,13 @@
 package com.example.practice.spring;
 
+import com.example.practice.spring.annotations.Autowire;
 import com.example.practice.spring.annotations.Component;
 import com.example.practice.spring.annotations.ComponentScan;
 import com.example.practice.spring.annotations.Configuration;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -68,5 +70,22 @@ public class ApplicationContext {
         } else {
             return source.listFiles();
         }
+    }
+
+    public <T> T getBean(Class<T> clazz) {
+        Object bean = hashMap.get(clazz);
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field: fields) {
+            if(field.isAnnotationPresent(Autowire.class)) {
+                field.setAccessible(true);
+                Class<?> fClass = field.getType();
+                try {
+                    field.set(bean, getBean(fClass));
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return (T) bean;
     }
 }

@@ -5,7 +5,9 @@ import java.util.List;
 
 public class Application {
     public static void main(String[] args) {
-        ProductService productService = new ProductService();
+        ApplicationContext applicationContext = new ApplicationContext(AppConfig.class);
+
+        ProductService productService = applicationContext.getBean(ProductService.class);
 
         List<Product> products = Arrays.asList(
                 new Product("Notebook", 10),

@@ -1,12 +1,14 @@
 package com.example.practice.spring;
 
+import com.example.practice.spring.annotations.Autowire;
 import com.example.practice.spring.annotations.Component;
 
 import java.util.List;
 
 @Component
 public class ProductService {
-    ProductRepository productRepository = new ProductRepository();
+    @Autowire
+    ProductRepository productRepository;
 
     public void getProductFinalPrice(List<Product> products) {
         List<Product> dbProducts = productRepository.getProductPrice(products);
